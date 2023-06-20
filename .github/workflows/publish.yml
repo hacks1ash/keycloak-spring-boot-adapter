@@ -1,0 +1,45 @@
+name: Publish Package To CodeArtifact
+
+on:
+  push:
+    tags:
+      - '**' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+  publish:
+    name: Publish Maven Package
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '17' ]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Get CodeArtifact Token
+        shell: bash
+        run: echo "##[set-output name=token;]$(echo $(aws codeartifact get-authorization-token --domain odradek --domain-owner 662147410103  --query authorizationToken --output text))"
+        id: codeartifact
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Build with Gradle
+        env:
+          CODEARTIFACT_TOKEN: ${{ steps.codeartifact.outputs.token }}
+        run: ./gradlew build
+
+      - name: Publish package
+        env:
+          CODEARTIFACT_TOKEN: ${{ steps.codeartifact.outputs.token }}
+        run:  ./gradlew publish
