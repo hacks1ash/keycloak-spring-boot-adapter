@@ -25,7 +25,6 @@ import static org.keycloak.TokenVerifier.SUBJECT_EXISTS_CHECK;
 @Slf4j
 public class KeycloakJWTDecoder implements JwtDecoder {
 
-
     private final RemotePublicKeyLocator remotePublicKeyLocator;
 
     private final KeycloakProperties keycloakProperties;
@@ -84,7 +83,6 @@ public class KeycloakJWTDecoder implements JwtDecoder {
 
     private OAuth2Error createOAuth2Error(String reason) {
         log.debug(reason);
-        return new OAuth2Error(OAuth2ErrorCodes.INVALID_TOKEN, reason,
-                "https://tools.ietf.org/html/rfc6750#section-3.1");
+        return new OAuth2Error(OAuth2ErrorCodes.INVALID_TOKEN, reason, "https://tools.ietf.org/html/rfc6750#section-3.1");
     }
 }

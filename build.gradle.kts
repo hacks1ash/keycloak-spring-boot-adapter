@@ -14,7 +14,7 @@ tasks.named("jar") {
 }
 
 group = "com.odradek"
-version = "1.0.0"
+version = properties["version"] as String
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -68,7 +68,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.odradek"
             artifactId = "keycloak-adapter"
-            version = rootProject.version.toString()
+            version = project.version.toString()
 
             from(components["java"])
 

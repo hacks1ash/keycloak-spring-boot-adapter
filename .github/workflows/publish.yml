@@ -3,7 +3,7 @@ name: Publish Package To CodeArtifact
 on:
   push:
     tags:
-      - '**' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
   publish:
@@ -34,12 +34,18 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      - name: Set package version
+        run: |
+          version="${{ github.ref_name }}"
+          version="${version:1}"
+          echo "PACKAGE_VERSION=${version}" >> "$GITHUB_ENV"
+
       - name: Build with Gradle
         env:
           CODEARTIFACT_TOKEN: ${{ steps.codeartifact.outputs.token }}
-        run: ./gradlew build
+        run: ./gradlew build -Pversion=${{ env.PACKAGE_VERSION }}
 
       - name: Publish package
         env:
           CODEARTIFACT_TOKEN: ${{ steps.codeartifact.outputs.token }}
-        run:  ./gradlew publish
+        run: ./gradlew publish -Pversion=${{ env.PACKAGE_VERSION }}
