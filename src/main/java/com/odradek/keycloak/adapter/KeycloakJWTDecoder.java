@@ -1,6 +1,14 @@
 package com.odradek.keycloak.adapter;
 
+import static org.keycloak.TokenVerifier.IS_ACTIVE;
+import static org.keycloak.TokenVerifier.SUBJECT_EXISTS_CHECK;
+
 import com.odradek.keycloak.adapter.utils.RemotePublicKeyLocator;
+import java.security.PublicKey;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.TokenVerifier;
 import org.keycloak.common.VerificationException;
@@ -12,15 +20,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.JwtValidationException;
-
-import java.security.PublicKey;
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.keycloak.TokenVerifier.IS_ACTIVE;
-import static org.keycloak.TokenVerifier.SUBJECT_EXISTS_CHECK;
 
 @Slf4j
 public class KeycloakJWTDecoder implements JwtDecoder {

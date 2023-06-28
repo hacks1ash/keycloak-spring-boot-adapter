@@ -1,5 +1,8 @@
 package com.odradek.keycloak.adapter;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.keycloak.TokenVerifier;
 import org.keycloak.common.VerificationException;
 import org.keycloak.representations.AccessToken;
@@ -7,10 +10,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
