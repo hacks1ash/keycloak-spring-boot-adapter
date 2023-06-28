@@ -6,8 +6,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityContextHelper {
 
-    public static OdradekUser getCurrentUser() {
-        return ((OdradekAuthenticationToken) SecurityContextHolder.getContext().getAuthentication()).getOdradekUser();
-    }
+  private SecurityContextHelper() {
+    throw new IllegalStateException("SecurityContextHelper class");
+  }
 
+  public static OdradekUser getCurrentUser() {
+    return ((OdradekAuthenticationToken) SecurityContextHolder.getContext().getAuthentication())
+        .getOdradekUser();
+  }
 }

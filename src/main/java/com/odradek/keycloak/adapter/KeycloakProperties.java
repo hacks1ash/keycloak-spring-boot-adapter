@@ -7,14 +7,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "keycloak")
 public class KeycloakProperties {
 
-    private String serverUrl;
+  private String serverUrl;
 
-    private String realm;
+  private String realm;
 
-    private String clientId;
+  private String clientId;
 
-    private String clientSecret;
+  private String clientSecret;
 
-    private boolean enabled = true;
-
+  private boolean enabled = true;
 }

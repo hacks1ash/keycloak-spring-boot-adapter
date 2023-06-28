@@ -14,7 +14,7 @@ tasks.named("jar") {
 }
 
 group = "com.odradek"
-version = properties["version"] as String
+version = properties["version"] as String ?: "1.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17

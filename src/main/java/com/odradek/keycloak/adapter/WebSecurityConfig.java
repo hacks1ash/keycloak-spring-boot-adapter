@@ -33,78 +33,79 @@ import org.springframework.web.client.RestTemplate;
 @AutoConfigureBefore(UserDetailsServiceAutoConfiguration.class)
 public class WebSecurityConfig {
 
-    private KeycloakProperties keycloakProperties;
+  private KeycloakProperties keycloakProperties;
 
-    @Bean
-    @ConditionalOnMissingBean
-    public AuthenticationEntryPoint authenticationEntryPoint() {
-        return (request, response, authException) -> response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  public AuthenticationEntryPoint authenticationEntryPoint() {
+    return (request, response, authException) ->
+        response.sendError(
+            HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, accessDeniedException) -> response.sendError(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase());
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  public AccessDeniedHandler accessDeniedHandler() {
+    return (request, response, accessDeniedException) ->
+        response.sendError(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase());
+  }
 
-    @Bean
-    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
-        return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
-    }
+  @Bean
+  public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+    return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
+  }
 
+  @Bean
+  public SecurityFilterChain httpSecurity(
+      HttpSecurity http,
+      AuthenticationEntryPoint authenticationEntryPoint,
+      AccessDeniedHandler accessDeniedHandler,
+      RemotePublicKeyLocator remotePublicKeyLocator)
+      throws Exception {
+    return http.cors(AbstractHttpConfigurer::disable)
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(
+            authorizeHttpRequests ->
+                authorizeHttpRequests
+                    .requestMatchers("/actuator/**")
+                    .permitAll()
+                    .anyRequest()
+                    .permitAll())
+        .oauth2ResourceServer(
+            oauth2ResourceServer ->
+                oauth2ResourceServer
+                    .jwt(
+                        (jwt) ->
+                            jwt.decoder(jwtDecoder(keycloakProperties, remotePublicKeyLocator))
+                                .jwtAuthenticationConverter(jwtAuthConverter(keycloakProperties)))
+                    .authenticationEntryPoint(authenticationEntryPoint)
+                    .accessDeniedHandler(accessDeniedHandler))
+        .sessionManagement(
+            sessionManagement ->
+                sessionManagement.sessionAuthenticationStrategy(
+                    new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl())))
+        .build();
+  }
 
-    @Bean
-    public SecurityFilterChain httpSecurity(
-            HttpSecurity http,
-            AuthenticationEntryPoint authenticationEntryPoint,
-            AccessDeniedHandler accessDeniedHandler,
-            RemotePublicKeyLocator remotePublicKeyLocator
-    ) throws Exception {
-        return http
-                .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorizeHttpRequests) ->
-                        authorizeHttpRequests
-                                .requestMatchers("/actuator/**").permitAll()
-                                .anyRequest().permitAll()
-                )
-                .oauth2ResourceServer(
-                        (oauth2ResourceServer) -> oauth2ResourceServer
-                                .jwt(
-                                        (jwt) -> jwt
-                                                .decoder(jwtDecoder(keycloakProperties, remotePublicKeyLocator))
-                                                .jwtAuthenticationConverter(jwtAuthConverter(keycloakProperties))
-                                )
-                                .authenticationEntryPoint(authenticationEntryPoint)
-                                .accessDeniedHandler(accessDeniedHandler)
-                )
-                .sessionManagement(
-                        (sessionManagement) ->
-                                sessionManagement
-                                        .sessionAuthenticationStrategy(new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl()))
-                ).build();
+  public JwtAuthConverter jwtAuthConverter(KeycloakProperties keycloakProperties) {
+    return new JwtAuthConverter(keycloakProperties);
+  }
 
-    }
+  @Bean
+  public JwtDecoder jwtDecoder(
+      KeycloakProperties keycloakProperties, RemotePublicKeyLocator remotePublicKeyLocator) {
+    return new KeycloakJWTDecoder(remotePublicKeyLocator, keycloakProperties);
+  }
 
-    public JwtAuthConverter jwtAuthConverter(KeycloakProperties keycloakProperties) {
-        return new JwtAuthConverter(keycloakProperties);
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  public RestTemplate restTemplate() {
+    return new RestTemplate();
+  }
 
-    @Bean
-    public JwtDecoder jwtDecoder(KeycloakProperties keycloakProperties, RemotePublicKeyLocator remotePublicKeyLocator) {
-        return new KeycloakJWTDecoder(remotePublicKeyLocator, keycloakProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
-    @Bean
-    public RemotePublicKeyLocator remotePublicKeyLocator(KeycloakProperties keycloakProperties, RestTemplate restTemplate) {
-        return new RemotePublicKeyLocator(keycloakProperties, restTemplate);
-    }
-
-
+  @Bean
+  public RemotePublicKeyLocator remotePublicKeyLocator(
+      KeycloakProperties keycloakProperties, RestTemplate restTemplate) {
+    return new RemotePublicKeyLocator(keycloakProperties, restTemplate);
+  }
 }
