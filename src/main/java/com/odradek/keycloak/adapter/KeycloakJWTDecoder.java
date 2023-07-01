@@ -3,6 +3,7 @@ package com.odradek.keycloak.adapter;
 import static org.keycloak.TokenVerifier.IS_ACTIVE;
 import static org.keycloak.TokenVerifier.SUBJECT_EXISTS_CHECK;
 
+import com.odradek.keycloak.adapter.utils.KeycloakUrlHelper;
 import com.odradek.keycloak.adapter.utils.RemotePublicKeyLocator;
 import java.security.PublicKey;
 import java.time.Instant;
@@ -53,9 +54,8 @@ public class KeycloakJWTDecoder implements JwtDecoder {
           new TokenVerifier.TokenTypeCheck(TokenUtil.TOKEN_TYPE_BEARER),
           IS_ACTIVE,
           new TokenVerifier.RealmUrlCheck(
-              this.keycloakProperties.getServerUrl()
-                  + "/realms/"
-                  + this.keycloakProperties.getRealm()));
+              KeycloakUrlHelper.getRealmUrl(
+                  this.keycloakProperties.getServerUrl(), this.keycloakProperties.getRealm())));
 
       tokenVerifier.publicKey(publicKey);
 

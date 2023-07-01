@@ -40,14 +40,11 @@ public class JWKSUtils {
   }
 
   private static KeyUse getKeyUse(String keyUse) {
-    switch (keyUse) {
-      case "sig":
-        return KeyUse.SIG;
-      case "enc":
-        return KeyUse.ENC;
-      default:
-        return null;
-    }
+    return switch (keyUse) {
+      case "sig" -> KeyUse.SIG;
+      case "enc" -> KeyUse.ENC;
+      default -> null;
+    };
   }
 
   public static JWK getKeyForUse(JSONWebKeySet keySet, JWK.Use requestedUse) {

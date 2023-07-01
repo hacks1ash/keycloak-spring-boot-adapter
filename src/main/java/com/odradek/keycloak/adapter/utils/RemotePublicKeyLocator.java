@@ -84,10 +84,8 @@ public class RemotePublicKeyLocator {
     try {
       ResponseEntity<JSONWebKeySet> responseEntity =
           restTemplate.getForEntity(
-              keycloakProperties.getServerUrl()
-                  + "/realms/"
-                  + keycloakProperties.getRealm()
-                  + "/protocol/openid-connect/certs",
+              KeycloakUrlHelper.getCertificateUrl(
+                  keycloakProperties.getServerUrl(), keycloakProperties.getRealm()),
               JSONWebKeySet.class);
       JSONWebKeySet jwks = responseEntity.getBody();
 
