@@ -1,1 +1,3 @@
 com.odradek.keycloak.adapter.WebSecurityConfig
+com.odradek.keycloak.adapter.CustomAccessDeniedController
+com.odradek.keycloak.adapter.CustomAuthenticationEntryPoint

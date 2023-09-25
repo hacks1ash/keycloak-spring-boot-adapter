@@ -1,7 +1,7 @@
 package com.odradek.keycloak.adapter.utils;
 
-import com.odradek.keycloak.adapter.OdradekAuthenticationToken;
-import com.odradek.keycloak.adapter.OdradekUser;
+import com.odradek.keycloak.adapter.KeycloakAuthentication;
+import com.odradek.keycloak.adapter.model.AbstractKeycloakUser;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityContextHelper {
@@ -10,8 +10,9 @@ public class SecurityContextHelper {
     throw new IllegalStateException("SecurityContextHelper class");
   }
 
-  public static OdradekUser getCurrentUser() {
-    return ((OdradekAuthenticationToken) SecurityContextHolder.getContext().getAuthentication())
-        .getOdradekUser();
+  @SuppressWarnings("unchecked")
+  public static <T extends AbstractKeycloakUser> T getCurrentUser() {
+    return ((KeycloakAuthentication<T>) SecurityContextHolder.getContext().getAuthentication())
+        .getAuthenticatedUser();
   }
 }

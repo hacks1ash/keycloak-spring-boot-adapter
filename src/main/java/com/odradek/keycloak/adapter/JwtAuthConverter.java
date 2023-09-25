@@ -1,8 +1,12 @@
 package com.odradek.keycloak.adapter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.odradek.keycloak.adapter.model.AbstractKeycloakUser;
+import com.odradek.keycloak.adapter.utils.OAuthUtils;
 import org.keycloak.TokenVerifier;
 import org.keycloak.common.VerificationException;
 import org.keycloak.representations.AccessToken;
@@ -10,13 +14,17 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtValidationException;
 
-public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+public class JwtAuthConverter<T extends AbstractKeycloakUser>
+    implements Converter<Jwt, AbstractAuthenticationToken> {
 
   private final KeycloakProperties keycloakProperties;
+  private final Class<T> tClass;
 
-  public JwtAuthConverter(KeycloakProperties keycloakProperties) {
+  public JwtAuthConverter(KeycloakProperties keycloakProperties, Class<T> tClass) {
     this.keycloakProperties = keycloakProperties;
+    this.tClass = tClass;
   }
 
   /**
@@ -30,10 +38,11 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
   @Override
   public AbstractAuthenticationToken convert(Jwt source) {
     try {
-      TokenVerifier<OdradekUser> tokenVerifier =
-          TokenVerifier.create(source.getTokenValue(), OdradekUser.class);
 
-      OdradekUser token = tokenVerifier.getToken();
+      TokenVerifier<T> tokenVerifier = TokenVerifier.create(source.getTokenValue(), tClass);
+
+      T token = tokenVerifier.getToken();
+
       AccessToken.Access access =
           token.getResourceAccess().get(this.keycloakProperties.getClientId());
 
@@ -42,9 +51,9 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
           roles.stream()
               .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
               .collect(Collectors.toSet());
-      return new OdradekAuthenticationToken(source, grantedAuthorities, token.getSubject(), token);
+      return new KeycloakAuthentication<>(source, grantedAuthorities, token.getSubject(), token);
     } catch (VerificationException e) {
-      throw new RuntimeException(e);
+      throw new IllegalArgumentException(e.getMessage());
     }
   }
 }

@@ -1,19 +1,8 @@
-package com.odradek.keycloak.adapter;
+package com.odradek.keycloak.adapter.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
 import org.keycloak.representations.AccessToken;
 
-@Getter
-@Setter
-public class OdradekUser extends AccessToken {
-
-  @JsonProperty("companyId")
-  private String companyId;
-
-  @JsonProperty("companyName")
-  private String companyName;
+public class AbstractKeycloakUser extends AccessToken {
 
   public boolean isServiceAccount() {
     return this.otherClaims.containsKey("clientId");

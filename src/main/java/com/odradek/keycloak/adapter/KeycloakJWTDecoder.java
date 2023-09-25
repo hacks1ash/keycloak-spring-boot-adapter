@@ -4,6 +4,7 @@ import static org.keycloak.TokenVerifier.IS_ACTIVE;
 import static org.keycloak.TokenVerifier.SUBJECT_EXISTS_CHECK;
 
 import com.odradek.keycloak.adapter.utils.KeycloakUrlHelper;
+import com.odradek.keycloak.adapter.utils.OAuthUtils;
 import com.odradek.keycloak.adapter.utils.RemotePublicKeyLocator;
 import java.security.PublicKey;
 import java.time.Instant;
@@ -80,13 +81,8 @@ public class KeycloakJWTDecoder implements JwtDecoder {
 
       return new Jwt(token, issuedAt, expiresAt, headers, claims);
     } catch (VerificationException e) {
-      throw new JwtValidationException(e.getMessage(), List.of(createOAuth2Error(e.getMessage())));
+      throw new JwtValidationException(
+          e.getMessage(), List.of(OAuthUtils.createOAuth2Error(e.getMessage())));
     }
-  }
-
-  private OAuth2Error createOAuth2Error(String reason) {
-    log.debug(reason);
-    return new OAuth2Error(
-        OAuth2ErrorCodes.INVALID_TOKEN, reason, "https://tools.ietf.org/html/rfc6750#section-3.1");
   }
 }

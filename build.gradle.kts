@@ -17,6 +17,8 @@ group = "com.odradek"
 version = properties["version"] as String ?: "1.0.0"
 
 java {
+    withSourcesJar()
+    withJavadocJar()
     sourceCompatibility = JavaVersion.VERSION_17
 }
 
