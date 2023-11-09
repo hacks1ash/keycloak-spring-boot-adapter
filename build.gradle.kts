@@ -92,16 +92,16 @@ publishing {
         password = System.getenv("GITHUB_TOKEN")
       }
     }
-//    maven {
-//      val releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-//      val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-//      name = "OSSRH"
-//      url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
-//      credentials {
-//        username = System.getenv("MAVEN_USERNAME")
-//        password = System.getenv("MAVEN_PASSWORD")
-//      }
-//    }
+    maven {
+      val releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+      val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+      name = "OSSRH"
+      url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
+      credentials {
+        username = System.getenv("MAVEN_USERNAME")
+        password = System.getenv("MAVEN_PASSWORD")
+      }
+    }
   }
 }
 
