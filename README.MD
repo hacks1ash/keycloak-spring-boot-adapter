@@ -65,9 +65,9 @@ Define a bean for your custom user type:
 
 ```java
 @Bean
-public JwtAuthConverter<CustomKeycloakUser> jwtAuthConverter(KeycloakProperties keycloakProperties) {
-    return new JwtAuthConverter<>(keycloakProperties, CustomKeycloakUser.class);
-}
+public JwtAuthConverter<CustomKeycloakUser> jwtAuthConverter(KeycloakProperties keycloakProperties){
+    return new JwtAuthConverter<>(keycloakProperties,CustomKeycloakUser.class);
+    }
 ```
 
 ### Accessing User Information
@@ -75,7 +75,7 @@ public JwtAuthConverter<CustomKeycloakUser> jwtAuthConverter(KeycloakProperties 
 Retrieve the authenticated user using `SecurityContextHelper`:
 
 ```java
-CustomKeycloakUser currentUser = SecurityContextHelper.getCurrentUser();
+CustomKeycloakUser currentUser=SecurityContextHelper.getCurrentUser();
 ```
 
 ### Custom AuthenticationEntryPoint and AccessDeniedHandler
@@ -85,13 +85,14 @@ CustomKeycloakUser currentUser = SecurityContextHelper.getCurrentUser();
 Customize the response when authentication fails:
 
 ```java
+
 @Configuration
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException {
-        response.sendError(HttpStatus.UNAUTHORIZED.value(), "Custom Unauthorized Message");
-    }
+  @Override
+  public void commence(HttpServletRequest request, HttpServletResponse response,
+                       AuthenticationException authException) throws IOException {
+    response.sendError(HttpStatus.UNAUTHORIZED.value(), "Custom Unauthorized Message");
+  }
 }
 
 ```
@@ -101,13 +102,14 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 Customize the response when access is denied:
 
 ```java
+
 @Configuration
 public class CustomAccessDeniedController implements AccessDeniedHandler {
-    @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response,
-                       AccessDeniedException accessDeniedException) throws IOException {
-        response.sendError(HttpStatus.FORBIDDEN.value(), "Custom Access Denied Message");
-    }
+  @Override
+  public void handle(HttpServletRequest request, HttpServletResponse response,
+                     AccessDeniedException accessDeniedException) throws IOException {
+    response.sendError(HttpStatus.FORBIDDEN.value(), "Custom Access Denied Message");
+  }
 }
 
 ```
@@ -124,4 +126,5 @@ We welcome contributions. Please submit pull requests for enhancements.
 
 ## License
 
-This project is licensed under the **The Apache License, Version 2.0** - see the [LICENSE](http://www.apache.org/licenses/LICENSE-2.0.txt) file for details.
+This project is licensed under the **The Apache License, Version 2.0** - see
+the [LICENSE](http://www.apache.org/licenses/LICENSE-2.0.txt) file for details.
