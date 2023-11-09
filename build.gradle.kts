@@ -67,6 +67,13 @@ publishing {
         description.set("Keycloak Adapter for Spring Boot >= 3")
         url.set("https://github.com/hacks1ash/keycloak-spring-boot-adapter")
 
+        licenses {
+          license {
+            name = "The Apache License, Version 2.0"
+            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          }
+        }
+
         scm {
           connection.set("scm:git:git://github.com/hacks1ash/keycloak-spring-boot-adapter.git")
           developerConnection.set("scm:git:ssh://github.com/hacks1ash/keycloak-spring-boot-adapter.git")
@@ -84,14 +91,6 @@ publishing {
     }
   }
   repositories {
-    maven {
-      name = "GitHubPackages"
-      url = uri("https://maven.pkg.github.com/hacks1ash/keycloak-spring-boot-adapter")
-      credentials {
-        username = System.getenv("GITHUB_ACTOR")
-        password = System.getenv("GITHUB_TOKEN")
-      }
-    }
     maven {
       val releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
       val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
