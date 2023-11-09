@@ -42,11 +42,11 @@ In your `application.yaml`, add:
 
 ```yaml
 keycloak:
-  serverUrl: https://keycloak-server.example.com # Replace with your Keycloak server URL
-  realm: myrealm                                 # Replace with your Keycloak realm
-  clientId: myclientid                           # Replace with your Keycloak client ID
-  clientSecret: myclientsecret                   # Replace with your Keycloak client secret
-  enabled: true                                  # Enable or disable Keycloak integration
+  server-url: http://localhost:8080/auth # Replace with your Keycloak server URL
+  realm: myrealm                         # Replace with your Keycloak realm
+  client-id: myclientid                  # Replace with your Keycloak client ID
+  client-secret: myclientsecret          # Replace with your Keycloak client secret
+  enabled: true                          # Enable or disable Keycloak integration
 ```
 
 ### Extending the User Model
