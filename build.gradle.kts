@@ -1,7 +1,7 @@
 plugins {
   `java-library`
   `maven-publish`
-//  signing
+  signing
   id("org.springframework.boot") version "3.1.5"
   id("io.spring.dependency-management") version "1.1.3"
 }
@@ -105,13 +105,13 @@ publishing {
   }
 }
 
-//signing {
-//  val signingKey: String? = System.getenv("SIGNING_KEY")
-//  val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
-//  useInMemoryPgpKeys(signingKey, signingPassword)
-//
-//  sign(publishing.publications["mavenJava"])
-//}
+signing {
+  val signingKey: String? = System.getenv("SIGNING_KEY")
+  val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+  useInMemoryPgpKeys(signingKey, signingPassword)
+
+  sign(publishing.publications["mavenJava"])
+}
 
 tasks.javadoc {
   if (JavaVersion.current().isJava9Compatible) {
