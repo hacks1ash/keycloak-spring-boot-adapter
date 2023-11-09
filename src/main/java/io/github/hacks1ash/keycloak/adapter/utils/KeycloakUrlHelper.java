@@ -1,4 +1,4 @@
-package com.odradek.keycloak.adapter.utils;
+package io.github.hacks1ash.keycloak.adapter.utils;
 
 public class KeycloakUrlHelper {
 

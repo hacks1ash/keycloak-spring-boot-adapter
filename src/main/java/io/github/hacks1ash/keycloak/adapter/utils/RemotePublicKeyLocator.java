@@ -1,10 +1,12 @@
-package com.odradek.keycloak.adapter.utils;
+package io.github.hacks1ash.keycloak.adapter.utils;
 
-import com.odradek.keycloak.adapter.KeycloakProperties;
+import io.github.hacks1ash.keycloak.adapter.KeycloakProperties;
+
 import java.security.PublicKey;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.common.util.Time;
 import org.keycloak.crypto.KeyWrapper;

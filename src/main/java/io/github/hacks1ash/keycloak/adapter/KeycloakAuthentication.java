@@ -1,6 +1,6 @@
-package com.odradek.keycloak.adapter;
+package io.github.hacks1ash.keycloak.adapter;
 
-import com.odradek.keycloak.adapter.model.AbstractKeycloakUser;
+import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
 import java.util.Collection;
 
 import lombok.EqualsAndHashCode;

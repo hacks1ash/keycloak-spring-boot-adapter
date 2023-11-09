@@ -1,4 +1,4 @@
-package com.odradek.keycloak.adapter.model;
+package io.github.hacks1ash.keycloak.adapter.model;
 
 import org.keycloak.representations.AccessToken;
 

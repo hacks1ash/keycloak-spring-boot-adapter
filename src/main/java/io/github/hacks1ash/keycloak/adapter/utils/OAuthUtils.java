@@ -1,4 +1,4 @@
-package com.odradek.keycloak.adapter.utils;
+package io.github.hacks1ash.keycloak.adapter.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.core.OAuth2Error;

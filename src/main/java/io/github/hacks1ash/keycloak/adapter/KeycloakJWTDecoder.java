@@ -1,11 +1,11 @@
-package com.odradek.keycloak.adapter;
+package io.github.hacks1ash.keycloak.adapter;
 
 import static org.keycloak.TokenVerifier.IS_ACTIVE;
 import static org.keycloak.TokenVerifier.SUBJECT_EXISTS_CHECK;
 
-import com.odradek.keycloak.adapter.utils.KeycloakUrlHelper;
-import com.odradek.keycloak.adapter.utils.OAuthUtils;
-import com.odradek.keycloak.adapter.utils.RemotePublicKeyLocator;
+import io.github.hacks1ash.keycloak.adapter.utils.KeycloakUrlHelper;
+import io.github.hacks1ash.keycloak.adapter.utils.OAuthUtils;
+import io.github.hacks1ash.keycloak.adapter.utils.RemotePublicKeyLocator;
 import java.security.PublicKey;
 import java.time.Instant;
 import java.util.HashMap;
@@ -16,8 +16,6 @@ import org.keycloak.TokenVerifier;
 import org.keycloak.common.VerificationException;
 import org.keycloak.representations.JsonWebToken;
 import org.keycloak.util.TokenUtil;
-import org.springframework.security.oauth2.core.OAuth2Error;
-import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;

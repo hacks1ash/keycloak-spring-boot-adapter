@@ -1,4 +1,4 @@
-package com.odradek.keycloak.adapter;
+package io.github.hacks1ash.keycloak.adapter;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

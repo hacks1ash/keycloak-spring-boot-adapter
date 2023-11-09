@@ -1,7 +1,7 @@
-package com.odradek.keycloak.adapter.utils;
+package io.github.hacks1ash.keycloak.adapter.utils;
 
-import com.odradek.keycloak.adapter.KeycloakAuthentication;
-import com.odradek.keycloak.adapter.model.AbstractKeycloakUser;
+import io.github.hacks1ash.keycloak.adapter.KeycloakAuthentication;
+import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityContextHelper {
