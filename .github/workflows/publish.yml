@@ -1,4 +1,4 @@
-name: Publish Package To CodeArtifact
+name: Publish Package
 
 on:
   push:
@@ -9,12 +9,14 @@ jobs:
   publish:
     name: Publish Maven Package
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     strategy:
       matrix:
         java: [ '17' ]
     steps:
       - uses: actions/checkout@v4
-
 
       - name: Identify Version
         id: version
@@ -39,4 +41,5 @@ jobs:
           arguments: publish
         env:
           PACKAGE_VERSION: ${{ steps.version.outputs.PACKAGE_VERSION }}
+          GITHUB_ACTOR: ${{ env.GITHUB_ACTOR }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
