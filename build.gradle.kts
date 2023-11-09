@@ -36,10 +36,10 @@ repositories {
 val keycloakVersion = "22.0.5"
 
 dependencies {
-  implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-  implementation("org.springframework.boot:spring-boot-starter-security")
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("org.keycloak:keycloak-core:$keycloakVersion")
+  api("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+  api("org.springframework.boot:spring-boot-starter-security")
+  api("org.springframework.boot:spring-boot-starter-web")
+  api("org.keycloak:keycloak-core:$keycloakVersion")
 
   compileOnly("org.projectlombok:lombok")
   annotationProcessor("org.projectlombok:lombok")
