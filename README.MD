@@ -30,7 +30,7 @@ Keycloak.
 
 ```groovy
 dependencies {
-    implementation 'io.github.hacks1ash:keycloak-spring-boot-adapter:1.0.0'
+    implementation 'io.github.hacks1ash:keycloak-spring-boot-adapter:1.0.1'
 }
 ```
 
