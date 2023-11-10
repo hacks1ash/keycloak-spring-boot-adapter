@@ -10,6 +10,12 @@ import org.springframework.security.core.Transient;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
+/**
+ * Custom authentication class that extends JwtAuthenticationToken to include Keycloak-specific user
+ * details.
+ *
+ * @param <T> The type of the user details, which extends AbstractKeycloakUser.
+ */
 @Getter
 @Transient
 @EqualsAndHashCode(callSuper = true)
@@ -18,11 +24,12 @@ public class KeycloakAuthentication<T extends AbstractKeycloakUser> extends JwtA
   private final T authenticatedUser;
 
   /**
-   * Constructs a {@code JwtAuthenticationToken} using the provided parameters.
+   * Constructs a KeycloakAuthentication object with the specified parameters.
    *
-   * @param jwt the JWT
-   * @param authorities the authorities assigned to the JWT
-   * @param name the principal name
+   * @param jwt The JWT token.
+   * @param authorities The collection of granted authorities.
+   * @param name The principal name.
+   * @param authenticatedUser The authenticated user details.
    */
   public KeycloakAuthentication(
       Jwt jwt,
@@ -32,5 +39,4 @@ public class KeycloakAuthentication<T extends AbstractKeycloakUser> extends JwtA
     super(jwt, authorities, name);
     this.authenticatedUser = authenticatedUser;
   }
-
 }

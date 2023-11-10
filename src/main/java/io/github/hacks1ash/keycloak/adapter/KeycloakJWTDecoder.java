@@ -11,7 +11,6 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
 import org.keycloak.TokenVerifier;
 import org.keycloak.common.VerificationException;
 import org.keycloak.representations.JsonWebToken;
@@ -21,13 +20,23 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.JwtValidationException;
 
-@Slf4j
+/**
+ * A custom implementation of {@link JwtDecoder} for decoding and verifying JWT tokens issued by
+ * Keycloak.
+ */
 public class KeycloakJWTDecoder implements JwtDecoder {
 
   private final RemotePublicKeyLocator remotePublicKeyLocator;
 
   private final KeycloakProperties keycloakProperties;
 
+  /**
+   * Constructs a KeycloakJWTDecoder with specified remote public key locator and Keycloak
+   * properties.
+   *
+   * @param remotePublicKeyLocator Locator for public keys.
+   * @param keycloakProperties Properties configuration for Keycloak.
+   */
   public KeycloakJWTDecoder(
       RemotePublicKeyLocator remotePublicKeyLocator, KeycloakProperties keycloakProperties) {
     this.remotePublicKeyLocator = remotePublicKeyLocator;
@@ -35,11 +44,11 @@ public class KeycloakJWTDecoder implements JwtDecoder {
   }
 
   /**
-   * Decodes the JWT from it's compact claims representation format and returns a {@link Jwt}.
+   * Decodes a JWT token to a {@link Jwt} object.
    *
-   * @param token the JWT value
-   * @return a {@link Jwt}
-   * @throws JwtException if an error occurs while attempting to decode the JWT
+   * @param token the JWT token string.
+   * @return a decoded {@link Jwt} object.
+   * @throws JwtException if the token cannot be decoded or if it's invalid.
    */
   @Override
   public Jwt decode(String token) throws JwtException {

@@ -12,24 +12,35 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+/**
+ * A converter that transforms a JWT token into an AbstractAuthenticationToken, specifically for
+ * Keycloak authentication in a Spring Security context.
+ *
+ * @param <T> The user type that extends AbstractKeycloakUser.
+ */
 public class JwtAuthConverter<T extends AbstractKeycloakUser>
     implements Converter<Jwt, AbstractAuthenticationToken> {
 
   private final KeycloakProperties keycloakProperties;
   private final Class<T> tClass;
 
+  /**
+   * Constructor for JwtAuthConverter.
+   *
+   * @param keycloakProperties Configuration properties for Keycloak.
+   * @param tClass The class type of the user.
+   */
   public JwtAuthConverter(KeycloakProperties keycloakProperties, Class<T> tClass) {
     this.keycloakProperties = keycloakProperties;
     this.tClass = tClass;
   }
 
   /**
-   * Convert the source object of type {@code S} to target type {@code T}.
+   * Converts a JWT token to an AbstractAuthenticationToken.
    *
-   * @param source the source object to convert, which must be an instance of {@code S} (never
-   *     {@code null})
-   * @return the converted object, which must be an instance of {@code T} (potentially {@code null})
-   * @throws IllegalArgumentException if the source cannot be converted to the desired target type
+   * @param source The source JWT token to convert.
+   * @return The converted AbstractAuthenticationToken.
+   * @throws IllegalArgumentException if the source JWT token cannot be converted.
    */
   @Override
   public AbstractAuthenticationToken convert(Jwt source) {
