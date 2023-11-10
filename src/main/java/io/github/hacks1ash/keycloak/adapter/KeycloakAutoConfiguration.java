@@ -12,6 +12,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Auto-configuration class for integrating Keycloak with Spring Boot applications. This
+ * configuration is conditionally enabled based on the presence of Keycloak properties.
+ */
 @Configuration
 @EnableConfigurationProperties(KeycloakProperties.class)
 @AutoConfigureBefore(UserDetailsServiceAutoConfiguration.class)
@@ -25,16 +29,28 @@ public class KeycloakAutoConfiguration {
 
   private final RestTemplate restTemplate = new RestTemplate();
 
+  /**
+   * Creates a RemotePublicKeyLocator bean for locating public keys from a Keycloak server.
+   *
+   * @param keycloakProperties The Keycloak configuration properties.
+   * @return A RemotePublicKeyLocator instance.
+   */
   @Bean
   public RemotePublicKeyLocator remotePublicKeyLocator(KeycloakProperties keycloakProperties) {
     return new RemotePublicKeyLocator(keycloakProperties, restTemplate);
   }
 
-
+  /**
+   * Creates a JwtAuthConverter bean for converting JWT tokens into authentication tokens. The
+   * converter is conditionally created if no existing bean of this type is present.
+   *
+   * @param keycloakProperties The Keycloak configuration properties.
+   * @return A JwtAuthConverter instance for Keycloak users.
+   */
   @Bean
   @ConditionalOnMissingBean
-  public JwtAuthConverter<AbstractKeycloakUser> jwtAuthConverter(KeycloakProperties keycloakProperties) {
+  public JwtAuthConverter<AbstractKeycloakUser> jwtAuthConverter(
+      KeycloakProperties keycloakProperties) {
     return new JwtAuthConverter<>(keycloakProperties, AbstractKeycloakUser.class);
   }
-
 }

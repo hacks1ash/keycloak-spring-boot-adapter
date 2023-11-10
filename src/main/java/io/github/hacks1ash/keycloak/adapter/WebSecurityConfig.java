@@ -18,6 +18,10 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
+/**
+ * Configuration class for setting up web security using Keycloak in a Spring Boot application. This
+ * class defines the necessary beans and configuration to integrate Keycloak with Spring Security.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -34,11 +38,25 @@ public class WebSecurityConfig {
 
   private RemotePublicKeyLocator remotePublicKeyLocator;
 
+  /**
+   * Registers the HttpSessionEventPublisher as a servlet listener. This is necessary for proper
+   * session management, especially in a clustered environment.
+   *
+   * @return {@link ServletListenerRegistrationBean} for the HttpSessionEventPublisher.
+   */
   @Bean
   public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
     return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
   }
 
+  /**
+   * Configures the HttpSecurity for the application. This method defines how security is managed,
+   * including CORS, CSRF, session management, and the setup of the resource server for OAuth2.
+   *
+   * @param http HttpSecurity object to be configured.
+   * @return Configured {@link SecurityFilterChain}.
+   * @throws Exception if an error occurs during configuration.
+   */
   @Bean
   public SecurityFilterChain httpSecurity(HttpSecurity http) throws Exception {
     return http.cors(AbstractHttpConfigurer::disable)
@@ -48,7 +66,7 @@ public class WebSecurityConfig {
                 oauth2ResourceServer
                     .jwt(
                         jwt ->
-                            jwt.decoder(jwtDecoder(this.remotePublicKeyLocator))
+                            jwt.decoder(jwtDecoder())
                                 .jwtAuthenticationConverter(this.jwtAuthConverter))
                     .authenticationEntryPoint(this.authenticationEntryPoint)
                     .accessDeniedHandler(this.accessDeniedHandler))
@@ -59,8 +77,14 @@ public class WebSecurityConfig {
         .build();
   }
 
+  /**
+   * Creates a JwtDecoder bean using the KeycloakJWTDecoder. This decoder is responsible for
+   * decoding and validating JWT tokens in the context of Keycloak.
+   *
+   * @return An instance of {@link JwtDecoder}.
+   */
   @Bean
-  public JwtDecoder jwtDecoder(RemotePublicKeyLocator remotePublicKeyLocator) {
-    return new KeycloakJWTDecoder(remotePublicKeyLocator, keycloakProperties);
+  public JwtDecoder jwtDecoder() {
+    return new KeycloakJWTDecoder(this.remotePublicKeyLocator, keycloakProperties);
   }
 }
