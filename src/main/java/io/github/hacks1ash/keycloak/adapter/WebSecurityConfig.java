@@ -1,15 +1,21 @@
 package io.github.hacks1ash.keycloak.adapter;
 
+import io.github.hacks1ash.keycloak.adapter.customizer.OAuth2ResourceServerCustomizer;
 import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
 import io.github.hacks1ash.keycloak.adapter.utils.RemotePublicKeyLocator;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -24,7 +30,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
  */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 @AllArgsConstructor
 public class WebSecurityConfig {
 
@@ -37,6 +43,14 @@ public class WebSecurityConfig {
   private JwtAuthConverter<? extends AbstractKeycloakUser> jwtAuthConverter;
 
   private RemotePublicKeyLocator remotePublicKeyLocator;
+
+  private Customizer<
+          AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>
+      authorizeHttpRequestsCustomizer;
+
+  private Customizer<CorsConfigurer<HttpSecurity>> corsCustomizer;
+
+  private Customizer<CsrfConfigurer<HttpSecurity>> csrfCustomizer;
 
   /**
    * Registers the HttpSessionEventPublisher as a servlet listener. This is necessary for proper
@@ -59,21 +73,17 @@ public class WebSecurityConfig {
    */
   @Bean
   public SecurityFilterChain httpSecurity(HttpSecurity http) throws Exception {
-    return http.cors(AbstractHttpConfigurer::disable)
-        .csrf(AbstractHttpConfigurer::disable)
-        .oauth2ResourceServer(
-            oauth2ResourceServer ->
-                oauth2ResourceServer
-                    .jwt(
-                        jwt ->
-                            jwt.decoder(jwtDecoder())
-                                .jwtAuthenticationConverter(this.jwtAuthConverter))
-                    .authenticationEntryPoint(this.authenticationEntryPoint)
-                    .accessDeniedHandler(this.accessDeniedHandler))
+    return http.cors(this.corsCustomizer)
+        .csrf(this.csrfCustomizer)
+        .authorizeHttpRequests(this.authorizeHttpRequestsCustomizer)
+        .oauth2ResourceServer(oAuth2ResourceServerCustomizer())
         .sessionManagement(
-            sessionManagement ->
-                sessionManagement.sessionAuthenticationStrategy(
-                    new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl())))
+            sessionManagement -> {
+              sessionManagement
+                  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                  .sessionAuthenticationStrategy(
+                      new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl()));
+            })
         .build();
   }
 
@@ -86,5 +96,21 @@ public class WebSecurityConfig {
   @Bean
   public JwtDecoder jwtDecoder() {
     return new KeycloakJWTDecoder(this.remotePublicKeyLocator, keycloakProperties);
+  }
+
+  /**
+   * Sets up the OAuth2 resource server configuration for the application, incorporating the
+   * necessary components such as JwtDecoder, JwtAuthConverter, AuthenticationEntryPoint, and
+   * AccessDeniedHandler.
+   *
+   * @return An OAuth2ResourceServerCustomizer instance for OAuth2 resource server configuration.
+   */
+  @Bean
+  public Customizer<OAuth2ResourceServerConfigurer<HttpSecurity>> oAuth2ResourceServerCustomizer() {
+    return new OAuth2ResourceServerCustomizer(
+        jwtDecoder(),
+        this.jwtAuthConverter,
+        this.authenticationEntryPoint,
+        this.accessDeniedHandler);
   }
 }

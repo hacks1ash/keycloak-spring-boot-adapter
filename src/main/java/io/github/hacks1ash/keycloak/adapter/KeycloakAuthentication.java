@@ -2,7 +2,6 @@ package io.github.hacks1ash.keycloak.adapter;
 
 import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
 import java.util.Collection;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +20,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 @EqualsAndHashCode(callSuper = true)
 public class KeycloakAuthentication<T extends AbstractKeycloakUser> extends JwtAuthenticationToken {
 
+  /** The authenticated user details. */
   private final T authenticatedUser;
 
   /**
