@@ -1,5 +1,8 @@
 # Keycloak Spring Boot Adapter
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.hacks1ash/keycloak-spring-boot-adapter.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.hacks1ash%22%20AND%20a:%22keycloak-spring-boot-adapter%22)
+[![License](https://img.shields.io/github/license/hacks1ash/keycloak-spring-boot-adapter.svg)](https://img.shields.io/github/license/hacks1ash/keycloak-spring-boot-adapter.svg)
+
 ### Table of Content
 
 - [Description](#description)
