@@ -1,10 +1,8 @@
 package io.github.hacks1ash.keycloak.adapter.customizer;
 
 import io.github.hacks1ash.keycloak.adapter.JwtAuthConverter;
-import io.github.hacks1ash.keycloak.adapter.KeycloakJWTDecoder;
 import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;

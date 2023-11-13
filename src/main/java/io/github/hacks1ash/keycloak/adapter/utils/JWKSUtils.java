@@ -2,7 +2,6 @@ package io.github.hacks1ash.keycloak.adapter.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.keycloak.crypto.KeyUse;
 import org.keycloak.crypto.KeyWrapper;
 import org.keycloak.crypto.PublicKeysWrapper;

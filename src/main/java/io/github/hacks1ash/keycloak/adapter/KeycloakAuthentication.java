@@ -2,7 +2,6 @@ package io.github.hacks1ash.keycloak.adapter;
 
 import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
 import java.util.Collection;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
