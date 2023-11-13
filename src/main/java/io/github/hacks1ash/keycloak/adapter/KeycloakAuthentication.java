@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 @EqualsAndHashCode(callSuper = true)
 public class KeycloakAuthentication<T extends AbstractKeycloakUser> extends JwtAuthenticationToken {
 
+  /** The authenticated user details. */
   private final T authenticatedUser;
 
   /**

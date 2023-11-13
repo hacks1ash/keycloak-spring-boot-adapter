@@ -1,5 +1,27 @@
 # Keycloak Spring Boot Adapter
 
+### Table of Content
+
+- [Description](#description)
+- [Features](#features)
+- [Installation](#installation)
+    - [Maven](#maven)
+    - [Gradle](#gradle)
+- [Usage](#usage)
+    - [Configuration](#configuration)
+    - [Extending the User Model](#extending-the-user-model)
+    - [Accessing User Information](#accessing-user-information)
+    - [Custom AuthenticationEntryPoint and AccessDeniedHandler](#custom-authenticationentrypoint-and-accessdeniedhandler)
+        - [AuthenticationEntryPoint](#authenticationentrypoint)
+        - [AccessDeniedHandler](#accessdeniedhandler)
+    - [Custom Customizers](#custom-customizers)
+        - [Custom CSRF Customizer](#custom-csrf-customizer)
+        - [Custom Cors Customizer](#custom-cors-customizer)
+        - [Custom HttpRequest Authorization Customizer](#custom-httprequest-authorization-customizer)
+- [Important Notes](#important-notes)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Description
 
 This Keycloak Spring Boot Adapter enables the integration of Keycloak for authentication and authorization in Spring
@@ -22,7 +44,7 @@ Keycloak.
 <dependency>
     <groupId>io.github.hacks1ash</groupId>
     <artifactId>keycloak-spring-boot-adapter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -30,7 +52,7 @@ Keycloak.
 
 ```groovy
 dependencies {
-    implementation 'io.github.hacks1ash:keycloak-spring-boot-adapter:1.0.1'
+    implementation 'io.github.hacks1ash:keycloak-spring-boot-adapter:1.0.3'
 }
 ```
 
@@ -114,11 +136,91 @@ public class CustomAccessDeniedController implements AccessDeniedHandler {
 
 ```
 
+## Custom Customizers
+
+### Custom CSRF Customizer
+
+To customize CSRF, implement `Customizer<CsrfConfigurer<HttpSecurity>>`:
+
+```java
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+
+@Configuration
+class KeycloakConfig {
+
+  @Bean
+  public Customizer<CsrfConfigurer<HttpSecurity>> csrf() {
+    return configurer -> {
+      configurer.disable();
+    };
+  }
+}
+
+```
+
+### Custom Cors Customizer
+
+To customize CORS, implement `Customizer<CorsConfigurer<HttpSecurity>>`:
+
+```java
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+
+@Configuration
+class KeycloakConfig {
+
+  @Bean
+  public Customizer<CorsConfigurer<HttpSecurity>> cors() {
+    return configurer -> {
+      configurer.disable();
+    };
+  }
+}
+
+```
+
+### Custom HttpRequest Authorization Customizer
+
+To customize HttpRequest Authorization,
+implement `AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry`:
+
+```java
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+
+@Configuration
+class KeycloakConfig {
+
+  @Bean
+  public Customizer<
+      AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>
+  customizer() {
+    return configurer -> {
+      configurer.requestMatchers("/actuator/**").permitAll().anyRequest().authenticated();
+    };
+  }
+}
+
+```
+
 ## Important Notes
 
 - Custom user properties are only loaded from the decoded access token.
 - The `@JsonProperty` annotation is required for all custom user fields.
 - This adapter is compatible only with Spring Boot version 3.0 and above.
+- By default, all http request should be authenticated. To customize this, implement
+  `AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry` and define a bean for it.
+  See [Custom HttpRequest Authorization Customizer](#custom-httprequest-authorization-customizer) for an example.
+- By default, all cors requests are disabled. To customize this, implement `Customizer<CorsConfigurer<HttpSecurity>>`
+  and define a bean for it.
+  See [Custom Cors Customizer](#custom-cors-customizer) for an example.
+- By default, all csrf requests are disabled. To customize this, implement `Customizer<CsrfConfigurer<HttpSecurity>>`
+  and define a bean for it.
+  See [Custom CSRF Customizer](#custom-csrf-customizer) for an example.
 
 ## Contributing
 
