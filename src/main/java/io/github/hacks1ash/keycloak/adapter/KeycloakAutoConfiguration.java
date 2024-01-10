@@ -3,7 +3,7 @@ package io.github.hacks1ash.keycloak.adapter;
 import io.github.hacks1ash.keycloak.adapter.customizer.AuthorizeHttpRequestsCustomizer;
 import io.github.hacks1ash.keycloak.adapter.customizer.CorsCustomizer;
 import io.github.hacks1ash.keycloak.adapter.customizer.CsrfCustomizer;
-import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
+import io.github.hacks1ash.keycloak.adapter.model.DefaultKeycloakUser;
 import io.github.hacks1ash.keycloak.adapter.utils.RemotePublicKeyLocator;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -63,9 +63,9 @@ public class KeycloakAutoConfiguration {
    */
   @Bean
   @ConditionalOnMissingBean(JwtAuthConverter.class)
-  public JwtAuthConverter<AbstractKeycloakUser> jwtAuthConverter(
+  public JwtAuthConverter<DefaultKeycloakUser> jwtAuthConverter(
       KeycloakProperties keycloakProperties) {
-    return new JwtAuthConverter<>(keycloakProperties, AbstractKeycloakUser.class);
+    return new JwtAuthConverter<>(keycloakProperties, DefaultKeycloakUser.class);
   }
 
   /**

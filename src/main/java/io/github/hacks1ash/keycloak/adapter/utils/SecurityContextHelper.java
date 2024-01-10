@@ -1,7 +1,7 @@
 package io.github.hacks1ash.keycloak.adapter.utils;
 
 import io.github.hacks1ash.keycloak.adapter.KeycloakAuthentication;
-import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
+import io.github.hacks1ash.keycloak.adapter.model.DefaultKeycloakUser;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
@@ -25,7 +25,7 @@ public class SecurityContextHelper {
    *     KeycloakAuthentication.
    */
   @SuppressWarnings("unchecked")
-  public static <T extends AbstractKeycloakUser> T getCurrentUser() {
+  public static <T extends DefaultKeycloakUser> T getCurrentUser() {
     return ((KeycloakAuthentication<T>) SecurityContextHolder.getContext().getAuthentication())
         .getAuthenticatedUser();
   }

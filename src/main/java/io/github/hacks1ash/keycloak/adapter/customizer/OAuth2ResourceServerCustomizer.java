@@ -1,7 +1,7 @@
 package io.github.hacks1ash.keycloak.adapter.customizer;
 
 import io.github.hacks1ash.keycloak.adapter.JwtAuthConverter;
-import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
+import io.github.hacks1ash.keycloak.adapter.model.DefaultKeycloakUser;
 import lombok.AllArgsConstructor;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,7 +25,7 @@ public class OAuth2ResourceServerCustomizer
 
   private JwtDecoder jwtDecoder;
 
-  private JwtAuthConverter<? extends AbstractKeycloakUser> jwtAuthConverter;
+  private JwtAuthConverter<? extends DefaultKeycloakUser> jwtAuthConverter;
 
   private AuthenticationEntryPoint authenticationEntryPoint;
 

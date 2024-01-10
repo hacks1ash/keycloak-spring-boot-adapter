@@ -1,6 +1,6 @@
 package io.github.hacks1ash.keycloak.adapter;
 
-import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
+import io.github.hacks1ash.keycloak.adapter.model.DefaultKeycloakUser;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
  *
  * @param <T> The user type that extends AbstractKeycloakUser.
  */
-public class JwtAuthConverter<T extends AbstractKeycloakUser>
+public class JwtAuthConverter<T extends DefaultKeycloakUser>
     implements Converter<Jwt, AbstractAuthenticationToken> {
 
   private final KeycloakProperties keycloakProperties;

@@ -3,11 +3,11 @@ package io.github.hacks1ash.keycloak.adapter.model;
 import org.keycloak.representations.AccessToken;
 
 /**
- * Abstract base class for Keycloak user representation.
+ * Base class for Keycloak user representation.
  * This class extends the AccessToken representation from Keycloak,
  * enabling additional functionality and fields specific to the user's context in a Spring Boot application.
  */
-public abstract class AbstractKeycloakUser extends AccessToken {
+public class DefaultKeycloakUser extends AccessToken {
 
   /**
    * Checks if the current user is a service account.
