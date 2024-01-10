@@ -1,7 +1,7 @@
 package io.github.hacks1ash.keycloak.adapter;
 
 import io.github.hacks1ash.keycloak.adapter.customizer.OAuth2ResourceServerCustomizer;
-import io.github.hacks1ash.keycloak.adapter.model.AbstractKeycloakUser;
+import io.github.hacks1ash.keycloak.adapter.model.DefaultKeycloakUser;
 import io.github.hacks1ash.keycloak.adapter.utils.RemotePublicKeyLocator;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -40,7 +40,7 @@ public class WebSecurityConfig {
 
   private AuthenticationEntryPoint authenticationEntryPoint;
 
-  private JwtAuthConverter<? extends AbstractKeycloakUser> jwtAuthConverter;
+  private JwtAuthConverter<? extends DefaultKeycloakUser> jwtAuthConverter;
 
   private RemotePublicKeyLocator remotePublicKeyLocator;
 

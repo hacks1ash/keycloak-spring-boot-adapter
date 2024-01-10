@@ -3,7 +3,6 @@ plugins {
   `maven-publish`
   signing
   id("org.springframework.boot") version "3.1.5"
-  id("io.spring.dependency-management") version "1.1.3"
 }
 
 tasks.named("bootJar") {
@@ -33,21 +32,23 @@ repositories {
   mavenCentral()
 }
 
-val keycloakVersion = "22.0.5"
+extra["keycloakVersion"] = "22.0.5"
+extra["lombokVersion"] = "1.18.30"
+extra["springBootVersion"] = "3.1.5"
 
 dependencies {
-  implementation("org.springframework.boot:spring-boot-starter-web")
+  implementation("org.springframework.boot:spring-boot-starter-web:${property("springBootVersion")}")
 
-  api("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-  api("org.springframework.boot:spring-boot-starter-security")
-  api("org.keycloak:keycloak-core:$keycloakVersion")
+  api("org.springframework.boot:spring-boot-starter-oauth2-resource-server:${property("springBootVersion")}")
+  api("org.springframework.boot:spring-boot-starter-security:${property("springBootVersion")}")
+  api("org.keycloak:keycloak-core:${property("keycloakVersion")}")
 
-  compileOnly("org.projectlombok:lombok")
-  annotationProcessor("org.projectlombok:lombok")
-  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+  compileOnly("org.projectlombok:lombok:${property("lombokVersion")}")
+  annotationProcessor("org.projectlombok:lombok:${property("lombokVersion")}")
+  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${property("springBootVersion")}")
 
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("org.springframework.security:spring-security-test")
+  testImplementation("org.springframework.boot:spring-boot-starter-test:${property("springBootVersion")}")
+  testImplementation("org.springframework.security:spring-security-test:${property("springBootVersion")}")
 }
 
 tasks.withType<Test> {

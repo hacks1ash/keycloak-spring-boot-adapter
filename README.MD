@@ -47,7 +47,7 @@ Keycloak.
 <dependency>
     <groupId>io.github.hacks1ash</groupId>
     <artifactId>keycloak-spring-boot-adapter</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -55,7 +55,7 @@ Keycloak.
 
 ```groovy
 dependencies {
-    implementation 'io.github.hacks1ash:keycloak-spring-boot-adapter:1.0.3'
+    implementation 'io.github.hacks1ash:keycloak-spring-boot-adapter:1.1.0'
 }
 ```
 
@@ -76,10 +76,10 @@ keycloak:
 
 ### Extending the User Model
 
-To extend the user model, inherit from `AbstractKeycloakUser`. Use `@JsonProperty` to annotate custom fields:
+To extend the user model, inherit from `DefaultKeycloakUser`. Use `@JsonProperty` to annotate custom fields:
 
 ```java
-public class CustomKeycloakUser extends AbstractKeycloakUser {
+public class CustomKeycloakUser extends DefaultKeycloakUser {
   @JsonProperty("customField")
   private String customField;
   // additional fields and methods
