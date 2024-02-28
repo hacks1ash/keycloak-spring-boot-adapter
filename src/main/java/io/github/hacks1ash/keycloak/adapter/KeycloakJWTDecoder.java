@@ -8,6 +8,7 @@ import io.github.hacks1ash.keycloak.adapter.utils.OAuthUtils;
 import io.github.hacks1ash.keycloak.adapter.utils.RemotePublicKeyLocator;
 import java.security.PublicKey;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class KeycloakJWTDecoder implements JwtDecoder {
           remotePublicKeyLocator.getPublicKey(tokenVerifier.getHeader().getKeyId());
       tokenVerifier.withChecks(
           SUBJECT_EXISTS_CHECK,
-          new TokenVerifier.TokenTypeCheck(TokenUtil.TOKEN_TYPE_BEARER),
+          new TokenVerifier.TokenTypeCheck(Arrays.asList(TokenUtil.TOKEN_TYPE_BEARER)),
           IS_ACTIVE,
           new TokenVerifier.RealmUrlCheck(
               KeycloakUrlHelper.getRealmUrl(

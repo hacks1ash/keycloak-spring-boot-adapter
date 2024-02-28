@@ -30,7 +30,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
  */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 @AllArgsConstructor
 public class WebSecurityConfig {
 
@@ -78,12 +78,16 @@ public class WebSecurityConfig {
         .authorizeHttpRequests(this.authorizeHttpRequestsCustomizer)
         .oauth2ResourceServer(oAuth2ResourceServerCustomizer())
         .sessionManagement(
-            sessionManagement -> {
-              sessionManagement
-                  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                  .sessionAuthenticationStrategy(
-                      new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl()));
-            })
+            sessionManagement ->
+                sessionManagement
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionAuthenticationStrategy(
+                        new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl())))
+        .exceptionHandling(
+            exceptionHandling ->
+                exceptionHandling
+                    .authenticationEntryPoint(authenticationEntryPoint)
+                    .accessDeniedHandler(accessDeniedHandler))
         .build();
   }
 

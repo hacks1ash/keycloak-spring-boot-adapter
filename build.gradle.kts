@@ -32,7 +32,7 @@ repositories {
   mavenCentral()
 }
 
-extra["keycloakVersion"] = "22.0.5"
+extra["keycloakVersion"] = "23.0.0"
 extra["lombokVersion"] = "1.18.30"
 extra["springBootVersion"] = "3.1.5"
 
