@@ -3,7 +3,6 @@ plugins {
   `maven-publish`
   signing
   id("org.springframework.boot") version "3.1.5"
-  id("com.gradleup.nmcp").version("0.0.4")
 }
 
 tasks.named("bootJar") {
@@ -49,32 +48,11 @@ dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${property("springBootVersion")}")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test:${property("springBootVersion")}")
-//  testImplementation("org.springframework.security:spring-security-test:${property("springBootVersion")}")
+//  testImplementation("org.springframework.security:spring-security-test:${property("springBootVersion")}"
 }
 
 tasks.withType<Test> {
   useJUnitPlatform()
-}
-
-// ------------------------------------
-// PUBLISHING TO SONATYPE CONFIGURATION
-// ------------------------------------
-object Meta {
-  const val COMPONENT_TYPE = "java" // "java" or "versionCatalog"
-  const val GROUP = "io.github.hacks1ash"
-  const val ARTIFACT_ID = "keycloak-spring-boot-adapter"
-  const val PUBLISHING_TYPE = "AUTOMATIC" // USER_MANAGED or AUTOMATIC
-  val SHA_ALGORITHMS = listOf(
-    "SHA-256",
-    "SHA-512"
-  ) // sha256 and sha512 are supported but not mandatory. Only sha1 is mandatory but it is supported by default.
-  const val DESC = "Keycloak Adapter for Spring Boot >= 3"
-  const val LICENSE = "The Apache License, Version 2.0"
-  const val LICENSE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-  const val GITHUB_REPO = "hacks1ash/keycloak-spring-boot-adapter.git"
-  const val DEVELOPER_ID = "hacks1ash"
-  const val DEVELOPER_NAME = "Mikheil Maisuradze"
-  const val DEVELOPER_EMAIL = "28116494+hacks1ash@users.noreply.github.com"
 }
 
 publishing {
@@ -134,16 +112,6 @@ signing {
   useInMemoryPgpKeys(signingKey, signingPassword)
 
   sign(publishing.publications["mavenJava"])
-}
-
-nmcp {
-  // nameOfYourPublication must point to an existing publication
-  publish("mavenJava") {
-    username = System.getenv("SONARTYPE_USERNAME")
-    password = System.getenv("SONARTYPE_PASSWORD")
-    // publish manually from the portal
-    publicationType = "AUTOMATIC"
-  }
 }
 
 tasks.javadoc {
