@@ -38,7 +38,7 @@ jobs:
       - name: Publish package
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
         with:
-          arguments: publishAllPublicationsToCentralPortal
+          arguments: publish
         env:
           PACKAGE_VERSION: ${{ steps.version.outputs.PACKAGE_VERSION }}
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
