@@ -2,7 +2,7 @@ plugins {
   `java-library`
   `maven-publish`
   signing
-  id("org.springframework.boot") version "3.1.5"
+  id("org.springframework.boot") version "3.3.4"
 }
 
 tasks.named("bootJar") {
@@ -32,9 +32,9 @@ repositories {
   mavenCentral()
 }
 
-extra["keycloakVersion"] = "23.0.0"
-extra["lombokVersion"] = "1.18.30"
-extra["springBootVersion"] = "3.1.5"
+extra["keycloakVersion"] = "24.0.3"
+extra["lombokVersion"] = "1.18.34"
+extra["springBootVersion"] = "3.3.4"
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web:${property("springBootVersion")}")
