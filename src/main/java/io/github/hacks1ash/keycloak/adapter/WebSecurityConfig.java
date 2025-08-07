@@ -4,7 +4,6 @@ import io.github.hacks1ash.keycloak.adapter.customizer.OAuth2ResourceServerCusto
 import io.github.hacks1ash.keycloak.adapter.model.DefaultKeycloakUser;
 import io.github.hacks1ash.keycloak.adapter.utils.RemotePublicKeyLocator;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -16,17 +15,16 @@ import org.springframework.security.config.annotation.web.configurers.CorsConfig
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 /**
  * Configuration class for setting up web security using Keycloak in a Spring Boot application. This
  * class defines the necessary beans and configuration to integrate Keycloak with Spring Security.
+ *
+ * FIXED: Removed all session-related components for truly stateless configuration.
  */
 @Configuration
 @EnableWebSecurity
@@ -53,17 +51,6 @@ public class WebSecurityConfig {
   private Customizer<CsrfConfigurer<HttpSecurity>> csrfCustomizer;
 
   /**
-   * Registers the HttpSessionEventPublisher as a servlet listener. This is necessary for proper
-   * session management, especially in a clustered environment.
-   *
-   * @return {@link ServletListenerRegistrationBean} for the HttpSessionEventPublisher.
-   */
-  @Bean
-  public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
-    return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
-  }
-
-  /**
    * Configures the HttpSecurity for the application. This method defines how security is managed,
    * including CORS, CSRF, session management, and the setup of the resource server for OAuth2.
    *
@@ -81,8 +68,7 @@ public class WebSecurityConfig {
             sessionManagement ->
                 sessionManagement
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .sessionAuthenticationStrategy(
-                        new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl())))
+        )
         .exceptionHandling(
             exceptionHandling ->
                 exceptionHandling
